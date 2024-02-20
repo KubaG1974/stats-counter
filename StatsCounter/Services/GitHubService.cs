@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using StatsCounter.Models;
 
+
 namespace StatsCounter.Services;
 
 public interface IGitHubService

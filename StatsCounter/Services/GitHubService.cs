@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -10,18 +11,38 @@ public interface IGitHubService
 {
     Task<IEnumerable<RepositoryInfo>> GetRepositoryInfosByOwnerAsync(string owner);
 }
-    
+
 public class GitHubService : IGitHubService
 {
     private readonly HttpClient _httpClient;
-
+  
     public GitHubService(HttpClient httpClient)
     {
-        _httpClient = httpClient;
+        _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     }
-
-    public Task<IEnumerable<RepositoryInfo>> GetRepositoryInfosByOwnerAsync(string owner)
+  
+    public async Task<IEnumerable<RepositoryInfo>> GetRepositoryInfosByOwnerAsync(string owner)
     {
-        throw new NotImplementedException(); // TODO: add your code here
+        owner = owner.Trim();
+        _ = owner.Length > 0 ? owner : throw new ArgumentException("Owner name cannot be empty or whitespace.");
+        
+        HttpResponseMessage response;
+
+        try
+        {
+            response = await _httpClient.GetAsync($"users/{owner}/repos");
+        }
+        catch(HttpRequestException ex)
+        {
+            throw new Exception("There was a problem reaching the service.", ex);
+        }
+
+        using (response)
+        {
+            // 'EnsureSuccessStatusCode' will throw 'HttpRequestException' if the response status code does not indicate success
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsAsync<List<RepositoryInfo>>();
+        }
     }
 }

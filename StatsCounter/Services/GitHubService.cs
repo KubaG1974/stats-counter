@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -39,9 +38,6 @@ public class GitHubService : IGitHubService
 
         using (response)
         {
-            // 'EnsureSuccessStatusCode' will throw 'HttpRequestException' if the response status code does not indicate success
-            response.EnsureSuccessStatusCode();
-
             return await response.Content.ReadAsAsync<List<RepositoryInfo>>();
         }
     }

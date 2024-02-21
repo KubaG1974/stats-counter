@@ -26,6 +26,11 @@ namespace StatsCounter.Services
 
             IEnumerable<RepositoryInfo> repositories = await _gitHubService.GetRepositoryInfosByOwnerAsync(owner) ?? Enumerable.Empty<RepositoryInfo>();
 
+            if (repositories == null)
+            {
+                throw new Exception("Received null repository list from GitHub service.");
+            }
+            
             long totalSize = repositories.Sum(repo => repo.Size);
             long totalWatchers = repositories.Sum(repo => repo.Watchers);
             long totalForks = repositories.Sum(repo => repo.Forks);

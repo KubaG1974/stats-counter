@@ -56,9 +56,8 @@ public class GitHubServiceTests
                 {
                     Id = 1,
                     Name = "name",
-                    StargazersCount = 2,
-                    WatchersCount = 3,
-                    ForksCount = 4,
+                    Watchers = 3,
+                    Forks = 4,
                     Size = 5
                 }
             }.AsEnumerable());
